@@ -1,23 +1,55 @@
 package banksystem
 
-import "fmt"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+)
 
 type createUser struct {
-	UserName string
-	Password string
+	UserName string `json:"username"`
+	Password string `json:"password"`
 }
 
-func (c createUser) CreateUser() {
+func UserManagement(userChoice int) {
+
+	switch userChoice {
+	case 1:
+		CreateUser()
+	case 2:
+
+		LogIn()
+
+	}
+}
+
+func CreateUser() {
+	var UserName string
+	var Password string
 	fmt.Println("Enter user name:")
-	fmt.Scan(&c.UserName)
+	fmt.Scan(&UserName)
 	fmt.Println("Enter a password: ")
-	fmt.Scan(&c.Password)
+	fmt.Scan(&Password)
+
+	response := createUser{
+		UserName: UserName,
+		Password: Password,
+	}
+
+	writeToJson, _ := json.Marshal(response)
+	writeToJsonByte := []byte(writeToJson)
+	err := os.WriteFile("userCredentials.json", writeToJsonByte, 0640)
+	if err != nil {
+		errors.New("Error")
+	}
+	fmt.Println(writeToJson)
 
 }
-func LogIn() {
+func LogIn() bool {
 
 }
 
-func LogOut() {
+func LogOut() bool {
 
 }

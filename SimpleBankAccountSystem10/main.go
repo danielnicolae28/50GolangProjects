@@ -16,15 +16,6 @@ func main() {
 	fmt.Println("Welcome to Go Bank")
 	fmt.Scan(&userChoice)
 
-	switch userChoice {
-	case 1:
-
-		b.CreateUser()
-
-	case 2:
-
-		b.LogIn()
-
-	}
+	b.UserManagement(userChoice)
 
 }
