@@ -24,9 +24,9 @@ func main() {
 		b.CreateUser()
 	case 2:
 
-		isLogIn, userName, Deposit := b.LogIn()
+		isLogIn, userName, password, Deposit := b.LogIn()
 		if isLogIn {
-			a.AccountOn(userName, Deposit)
+			a.AccountOn(userName, password, Deposit)
 		} else {
 			isLogIn = b.LogOut()
 		}

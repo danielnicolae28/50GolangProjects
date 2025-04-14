@@ -13,8 +13,19 @@ type createUser struct {
 	Deposit  int    `json:"deposit"`
 }
 
-func UserManagement(userChoice int) {
+func SaveUserAccountModification(UserName, Password string, Deposit int) {
+	response := createUser{
+		UserName: UserName,
+		Password: Password,
+		Deposit:  Deposit,
+	}
 
+	writeToJson, _ := json.Marshal(response)
+	writeToJsonByte := []byte(writeToJson)
+	err := os.WriteFile("userCredentials.json", writeToJsonByte, 0640)
+	if err != nil {
+		errors.New("Error")
+	}
 }
 
 func CreateUser() {
@@ -33,21 +44,10 @@ func CreateUser() {
 		fmt.Scan(&Deposit)
 	}
 
-	response := createUser{
-		UserName: UserName,
-		Password: Password,
-		Deposit:  Deposit,
-	}
-
-	writeToJson, _ := json.Marshal(response)
-	writeToJsonByte := []byte(writeToJson)
-	err := os.WriteFile("userCredentials.json", writeToJsonByte, 0640)
-	if err != nil {
-		errors.New("Error")
-	}
+	SaveUserAccountModification(UserName, Password, Deposit)
 
 }
-func LogIn() (bool, string, int) {
+func LogIn() (bool, string, string, int) {
 	var UserName string
 	var Password string
 	fmt.Println("Enter user name:")
@@ -59,15 +59,11 @@ func LogIn() (bool, string, int) {
 	var user createUser
 	json.Unmarshal(credentialsValue, &user)
 
-	fmt.Println(user.UserName)
-	fmt.Println(user.Password)
-	fmt.Println(user.Deposit)
-
 	if UserName == user.UserName && Password == user.Password {
-		return true, UserName, user.Deposit
+		return true, UserName, Password, user.Deposit
 	} else {
 
-		return false, "", 0
+		return false, "", "", 0
 	}
 }
 
